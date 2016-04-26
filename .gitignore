@@ -15,6 +15,8 @@ gen/
 # Gradle files
 .gradle/
 build/
+/local.properties
+/app/build/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -30,3 +32,21 @@ proguard/
 
 # Android Studio captures folder
 captures/
+
+# Android Studio/InttelliJ
+*.iml
+*.ipr
+*.iws
+*.idea/
+out/
+app/app.iml
+
+# Mac
+.DS_Store
+
+# Maven
+target/
+pom.xml.*
+release.properties
+
+.idea/*
