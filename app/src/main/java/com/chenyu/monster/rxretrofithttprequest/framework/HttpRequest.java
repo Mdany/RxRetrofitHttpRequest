@@ -48,7 +48,7 @@ public class HttpRequest {
      * @param start      开始位置
      * @param count      数目
      */
-    public void getTopMovie(int start, int count,Subscriber<List<Subject>> subscriber) {
+    public void getTopMovie(int start, int count, Subscriber<List<Subject>> subscriber) {
         MovieService movieService = retrofit.create(MovieService.class);
 //        movieService.getTopMovie(start, count)
 //                .subscribeOn(Schedulers.io())
@@ -57,7 +57,9 @@ public class HttpRequest {
 //                .subscribe(subscriber);
         Observable<List<Subject>> observable = movieService.getTopMovie(start, count)
                 .map(new HttpResultFunc<List<Subject>>());
-        toSubscribe(observable, subscriber);
+
+        observable.compose(ScheduleCompat.<List<Subject>>applyIoSchedulers()).subscribe(subscriber);
+        //toSubscribe(observable, subscriber);
     }
 
     private <T> void toSubscribe(Observable<T> observable, Subscriber<T> subscriber) {
