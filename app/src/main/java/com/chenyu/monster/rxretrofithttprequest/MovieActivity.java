@@ -27,25 +27,22 @@ public class MovieActivity extends AppCompatActivity {
         getMovies();
     }
 
-    private void getMovies(){
-        HttpRequest.getInstance().getTopMovie(0, 10, new Subscriber<List<Subject>>() {
+    private void getMovies() {
+        HttpRequest.getInstance().getTopMovie(0, 10, new Subscriber<Subject>() {
             @Override
             public void onCompleted() {
-                Toast.makeText(MovieActivity.this,"completed",Toast.LENGTH_LONG).show();
+                Toast.makeText(MovieActivity.this, "completed", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onError(Throwable e) {
-                Toast.makeText(MovieActivity.this,"error",Toast.LENGTH_LONG).show();
+                Toast.makeText(MovieActivity.this, "error" + e.getMessage(), Toast.LENGTH_LONG).show();
             }
 
             @Override
-            public void onNext(List<Subject> subjects) {
-                if (subjects == null|| subjects.size() == 0){
-                    Toast.makeText(MovieActivity.this,"no data",Toast.LENGTH_LONG).show();
-                    return;
-                }
-                name.setText(subjects.get(0).getTitle());
+            public void onNext(Subject subject) {
+                Toast.makeText(MovieActivity.this, "subject---" + subject.getTitle(), Toast.LENGTH_SHORT).show();
+                name.setText(subject.getTitle());
             }
         });
     }
