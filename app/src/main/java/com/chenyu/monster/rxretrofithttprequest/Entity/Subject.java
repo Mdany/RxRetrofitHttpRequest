@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Created by chenyu on 16/4/26.
+ * 电影的model
  */
 public class Subject {
     private String id;

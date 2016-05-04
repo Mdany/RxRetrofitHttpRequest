@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -56,9 +57,10 @@ public class HttpRequest {
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribe(subscriber);
         movieService.getTopMovie(start, count)
+                .flatMap(new ResponseFunc<HttpResult<List<Subject>>>())
                 .flatMap(new Func1<HttpResult<List<Subject>>, Observable<List<Subject>>>() {
                     @Override
-                    public Observable<List<Subject>> call(HttpResult<List<Subject>> httpResult) {
+                    public Observable<List<Subject>> call(HttpResult<List<Subject>> httpResult) {//model统一继承entity，这里就可以抽成一个类
                         if (httpResult.getCount() != 0) {
                             return Observable.error(new ApiException(100));
                         } else {
@@ -91,4 +93,22 @@ public class HttpRequest {
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribe(subscriber);
 //    }
+
+    /**
+     * 统一处理response
+     *
+     * @param <T>
+     */
+    private class ResponseFunc<T> implements Func1<Response<T>, Observable<T>> {
+        @Override
+        public Observable<T> call(Response<T> response) {
+            if (response.isSuccessful()) {
+                return Observable.just(response.body());
+            }
+            switch (response.code()) {
+                default:
+                    return Observable.error(new ApiException(100));
+            }
+        }
+    }
 }
