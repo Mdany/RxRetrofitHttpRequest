@@ -61,7 +61,7 @@ public class HttpRequest {
                 .flatMap(new Func1<HttpResult<List<Subject>>, Observable<List<Subject>>>() {
                     @Override
                     public Observable<List<Subject>> call(HttpResult<List<Subject>> httpResult) {//model统一继承entity，这里就可以抽成一个类
-                        if (httpResult.getCount() != 0) {
+                        if (httpResult.getCount() == 0) {
                             return Observable.error(new ApiException(100));
                         } else {
                             return Observable.just(httpResult.getSubjects());
@@ -95,7 +95,7 @@ public class HttpRequest {
 //    }
 
     /**
-     * 统一处理response
+     * 统一处理 retrofit返回的response
      *
      * @param <T>
      */
